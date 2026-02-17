@@ -12,6 +12,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Run Security Tests
+        run: |
+          echo "Scanning for vulnerabilities..."
+          echo "CRITICAL ERROR: API Key found in public code!"
+          exit 1  # <--- This command forces the pipeline to FAIL
+
       - name: Run Build Simulation
         run: |
           echo "Starting build process..."
