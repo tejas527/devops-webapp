@@ -1,0 +1,32 @@
+name: CI/CD Pipeline with ChatOps
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code from the repo
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Simulate a Build/Test (Since it's HTML, we just echo a message)
+      - name: Run Build Simulation
+        run: |
+          echo "Starting build process..."
+          echo "Compiling assets..."
+          echo "Build complete! Website is ready."
+
+      # Step 3: Send Notification to Slack (ChatOps)
+      - name: Slack Notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+          text: 'Deployment Status: ${{ job.status }}'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # Uses the secret you added
+        if: always() # Runs even if the build fails
